@@ -1,0 +1,78 @@
+<div class="card m-4 p-3">
+    <form [formGroup]="addUpdateForm">
+    <div class="row">
+      <div class="col-sm-6 mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Name</label>
+        <input type="text" class="form-control" formControlName="name" placeholder="Name">
+      </div>
+      <div class="col-sm-6 mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Roll_No</label>
+        <input type="number" class="form-control" formControlName="roll_no" placeholder="Roll_No">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-6 mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Fees</label>
+        <input type="number" class="form-control" formControlName="fees" placeholder="Fees">
+      </div>
+      <div class="col-sm-6 mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Medium</label>
+        <input type="text" class="form-control" formControlName="medium" placeholder="Medium">
+      </div>
+    </div>
+    <div class="col-auto text-end">
+        <button type="button" class="btn btn-danger mb-3 me-2" (click)="clearForm()">Clear</button>
+      <button type="submit" class="btn btn-primary mb-3" (click)="onSubmit()">{{editFlag == false ? 'Submit' : 'Update'}}</button>
+    </div>
+</form>
+    </div>
+    
+    <div class="row m-2">
+      <div class="col-sm-8"></div>
+      <div class="col-sm-3">
+        <input type="text" class="form-control" [formControl]="textFilter" placeholder="Search By Name....">
+      </div>
+      <div class="col-sm-1">
+        <button type="button" class="btn btn-primary mb-3" (click)="pageNo = 1;getUserData()">Search</button>
+      </div>
+    </div>
+
+    <div class="m-3 p-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">SrNo</th>
+            <th scope="col">Name</th>
+            <th scope="col">Roll No</th>
+            <th scope="col">Fees</th>
+            <th scope="col">Medium</th>
+            <th scope="col">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let userData of usersArray | paginate: { itemsPerPage: 10, currentPage: pageNo, totalItems:getTotal}; let i = index"
+           [class.table-active]="highlightRow == userData?.id">
+            <th scope="row">{{((pageNo + 1) * 10 + i + 1)-20}}</th>
+            <td>{{userData.name}}</td>
+            <td>{{userData.roll_no}}</td>
+            <td>{{userData.fees}}</td>
+            <td>{{userData.medium}}</td>
+            <td>
+                <div class="btn-group">
+                    <button type="button" title="Edit Constituency" class="btn btn-sm btn-light text-edit me-1 rounded" (click)="editForm(userData)">
+                        <i class="far fa-edit"></i></button>
+                    <button type="button" title="Delete Constituency" class="btn btn-sm btn-light text-danger rounded" (click)="deleteApi(userData.id)">
+                        <i class="fas fa-trash-alt"></i></button>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mt-2 text-end" *ngIf="usersArray?.length != 0">
+        <pagination-controls previousLabel="" nextLabel=""
+            (pageChange)="onClickPagintion($event)">
+        </pagination-controls>
+    </div>
+    </div>
+    
+
