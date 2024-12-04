@@ -1,28 +1,56 @@
 <div class="card m-4 p-3">
     <form [formGroup]="addUpdateForm">
     <div class="row">
-      <div class="col-sm-6 mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Name</label>
-        <input type="text" class="form-control" formControlName="name" placeholder="Name">
+      <div class="col-sm-4 mb-3">
+        <label for="exampleFormControlInput1" class="form-label">First Name</label>
+        <input type="text" class="form-control" formControlName="firstName" placeholder="First Name">
       </div>
-      <div class="col-sm-6 mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Roll_No</label>
-        <input type="number" class="form-control" formControlName="roll_no" placeholder="Roll_No">
+      <div class="col-sm-4 mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Middle Name</label>
+        <input type="text" class="form-control" formControlName="middleName" placeholder="Middle Name">
+      </div>
+      <div class="col-sm-4 mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Last Name</label>
+        <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name">
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-6 mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Fees</label>
-        <input type="number" class="form-control" formControlName="fees" placeholder="Fees">
+      <div class="col-sm-4 mb-3">
+        <div class="col-sm-6">
+          <label class="form-label">Gender</label>
+          <div class="d-block">
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" formControlName="gender"
+                      id="inlineRadio1" value="male">
+                  <label class="form-check-label" for="inlineRadio1">Male</label>
+              </div>
+              <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" name="gender" formControlName="gender"
+                      id="inlineRadio2" value="female">
+                  <label class="form-check-label" for="inlineRadio2">Female</label>
+              </div>
+          </div>
       </div>
-      <div class="col-sm-6 mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Medium</label>
-        <input type="text" class="form-control" formControlName="medium" placeholder="Medium">
       </div>
-    </div>
-    <div class="col-auto text-end">
+      <div class="col-sm-4 mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Email Id</label>
+        <input type="email" class="form-control" formControlName="emailId" placeholder="Email Id">
+      </div>
+      <div class="col-sm-4 mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Contact No</label>
+        <input type="text" class="form-control" formControlName="contactNo" placeholder="Contact No">
+      </div>
+      <div class="col-sm-4 mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Department</label>
+          <select class="form-select" id="gender" name="gender" formControlName="department" placeholder="Department">
+            <option value="" disabled selected>Select Department</option>
+            <option [value]="dept.id" *ngFor="let dept of departmentArray">{{dept.textEnglish}}</option>
+          </select>
+      </div>
+      <div class="col-sm-8 text-end mt-4">
         <button type="button" class="btn btn-danger mb-3 me-2" (click)="clearForm()">Clear</button>
       <button type="submit" class="btn btn-primary mb-3" (click)="onSubmit()">{{editFlag == false ? 'Submit' : 'Update'}}</button>
+      </div>
     </div>
 </form>
     </div>
@@ -42,10 +70,11 @@
         <thead>
           <tr>
             <th scope="col">SrNo</th>
-            <th scope="col">Name</th>
-            <th scope="col">Roll No</th>
-            <th scope="col">Fees</th>
-            <th scope="col">Medium</th>
+            <th scope="col">Full Name</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Email Id</th>
+            <th scope="col">Contact No</th>
+            <th scope="col">Department</th>
             <th scope="col">Action</th>
           </tr>
         </thead>
@@ -53,10 +82,15 @@
           <tr *ngFor="let userData of usersArray | paginate: { itemsPerPage: 10, currentPage: pageNo, totalItems:getTotal}; let i = index"
            [class.table-active]="highlightRow == userData?.id">
             <th scope="row">{{((pageNo + 1) * 10 + i + 1)-20}}</th>
-            <td>{{userData.name}}</td>
-            <td>{{userData.roll_no}}</td>
-            <td>{{userData.fees}}</td>
-            <td>{{userData.medium}}</td>
+            <td>{{userData.firstName}} {{userData.middleName}} {{userData.lastName}}</td>
+            <td>{{userData.gender}}</td>
+            <td>{{userData.emailId}}</td>
+            <td>{{userData.contactNo}}</td>
+            <td>
+              <ng-container *ngFor="let dept of departmentArray">
+              <span *ngIf="dept.id == userData.department">{{dept.textEnglish}}</span>
+            </ng-container>
+            </td>
             <td>
                 <div class="btn-group">
                     <button type="button" title="Edit Constituency" class="btn btn-sm btn-light text-edit me-1 rounded" (click)="editForm(userData)">

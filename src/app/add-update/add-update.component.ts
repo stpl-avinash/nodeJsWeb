@@ -17,6 +17,7 @@ export class AddUpdateComponent implements OnInit {
   textFilter = new FormControl('');
   pageNo  = 1;
   getTotal:any;
+  departmentArray:any;
 
   constructor(
     private api: ServiceApiService,
@@ -25,24 +26,34 @@ export class AddUpdateComponent implements OnInit {
 
   ngOnInit() {
     this.defaultForm();
+    this.getAllDepartment();
     this.getUserData();
   }
 
   defaultForm() {
     this.addUpdateForm = this.fb.group({
       id: [0],
-      name: ['',Validators.required],
-      roll_no: ['',Validators.required],
-      fees: ['',Validators.required],
-      medium: ['',Validators.required]
+      firstName: ['',Validators.required],
+      middleName: ['',Validators.required],
+      lastName: ['',Validators.required],
+      gender: ['',Validators.required],
+      emailId: ['',Validators.required],
+      contactNo: ['',Validators.required],
+      department: ['',Validators.required]
     })
   }
 
   getUserData() {
     let obj = this.textFilter.value?.trim() + '&limit=' + 10 + '&page=' + this.pageNo;
-    this.api.get('getAll?name=' + obj).subscribe((res) => {
+    this.api.get('getAll?firstName=' + obj).subscribe((res) => {
       this.usersArray = res.rows;
       this.getTotal = res.metadata?.totalRecords;
+    });
+  }
+
+  getAllDepartment() {
+    this.api.getDepartment().subscribe((res) => {
+      this.departmentArray = res.responseData;
     });
   }
 
@@ -52,15 +63,17 @@ export class AddUpdateComponent implements OnInit {
       return;
     } else{
       let obj = {
-        "name": this.addUpdateForm.value.name,
-        "roll_no": +this.addUpdateForm.value.roll_no,
-        "fees": +this.addUpdateForm.value.fees,
-        "medium": this.addUpdateForm.value.medium,
+        // "id": 0,
+        "firstName": this.addUpdateForm.value.firstName,
+        "middleName": this.addUpdateForm.value.middleName,
+        "lastName": this.addUpdateForm.value.lastName,
+        "gender": this.addUpdateForm.value.gender,
+        "emailId": this.addUpdateForm.value.emailId,
+        "contactNo": this.addUpdateForm.value.contactNo,
+        "department": +this.addUpdateForm.value.department,
       }
       if (this.editFlag == false) {
         this.api.postApi('create', JSON.stringify(obj)).subscribe({
-
-
           next: (res: any) => {
             if(res.statusCode == 200){
               alert(res.message);
@@ -98,10 +111,13 @@ export class AddUpdateComponent implements OnInit {
     this.highlightRow = obj.id;
     this.addUpdateForm.patchValue({
       id: obj.id,
-      name: obj?.name,
-      roll_no: obj?.roll_no,
-      fees: obj?.fees,
-      medium: obj?.medium
+      firstName: obj.firstName,
+      middleName: obj.middleName,
+      lastName: obj.lastName,
+      gender: obj.gender,
+      emailId: obj.emailId,
+      contactNo: obj.contactNo,
+      department: +obj.department,
     })
   }
 

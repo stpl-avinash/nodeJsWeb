@@ -16,6 +16,10 @@ export class ServiceApiService {
     return this.http.get(API_URL + url).pipe(map((res) => res));
   }
 
+  getDepartment(): Observable<any> {
+    return this.http.get('https://mahamahasul-api.mahamining.com/MahaMahasul/api/Dropdown/GetAllDepartMent').pipe(map((res) => res));
+  }
+
    postApi(url: string, payload: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(API_URL + url, payload, { headers }).pipe(
