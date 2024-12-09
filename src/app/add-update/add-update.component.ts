@@ -63,6 +63,10 @@ export class AddUpdateComponent implements OnInit {
     clickInputFile?.click();
   }
 
+  openDoc(url:any){
+    window.open(url, '_blank');
+  }
+
   fileUpload(event:any) {
     let selectedFile:any = event.target.files[0];  // Capture the selected file
         this.api.uploadFile('upload',selectedFile).subscribe(

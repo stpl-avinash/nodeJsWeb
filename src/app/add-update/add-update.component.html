@@ -53,13 +53,11 @@
             <label for="fuPhoto" class="form-label">Document</label>
             <div class="uploadimg">
               <input type="file" id="img-upload" class="d-none" (change)="fileUpload($event)" #fileInput>
-              <button type="button" class="btn btn-primary btn-sm btn-add me-2" *ngIf="!addUpdateForm.value?.document"
-                (click)="openInputFile()"> Upload Document
+              <button type="button" class="btn btn-primary btn-sm btn-add me-4" *ngIf="!addUpdateForm.value?.document"
+                (click)="openInputFile()"> Upload Doc
               </button>
-              <button type="button" class="btn btn-light btn-sm btn-add" *ngIf="addUpdateForm.value?.document">
-                <a [attr.href]="addUpdateForm.value?.document" target="_blank">
+              <button type="button" class="btn btn-light btn-sm btn-add" *ngIf="addUpdateForm.value?.document" (click)="openDoc(addUpdateForm.value?.document)">
                   <i class="fa-duotone fa-regular fa-file-excel"></i>
-                </a>
               </button>
               <button type="button" class="btn btn-light btn-sm btn-remove" *ngIf="addUpdateForm.value?.document"
                 (click)="addUpdateForm.controls['document']?.setValue('')"><i
@@ -126,6 +124,10 @@
           </tr>
         </tbody>
       </table>
+      <div class="mt-2 text-end" *ngIf="usersArray?.length == 0">
+        <div class="alert alert-danger text-center py-2">No Data Found..!
+        </div>
+    </div>
       <div class="mt-2 text-end" *ngIf="usersArray?.length != 0">
         <pagination-controls previousLabel="" nextLabel=""
             (pageChange)="onClickPagintion($event)">
