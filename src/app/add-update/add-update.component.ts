@@ -39,13 +39,14 @@ export class AddUpdateComponent implements OnInit {
       gender: ['',Validators.required],
       emailId: ['',Validators.required],
       contactNo: ['',Validators.required],
-      department: ['',Validators.required]
+      department: ['',Validators.required],
+      document: [''],
     })
   }
 
   getUserData() {
     let obj = this.textFilter.value?.trim() + '&limit=' + 10 + '&page=' + this.pageNo;
-    this.api.get('getAll?firstName=' + obj).subscribe((res) => {
+    this.api.get('getAll?fullName=' + obj).subscribe((res) => {
       this.usersArray = res.rows;
       this.getTotal = res.metadata?.totalRecords;
     });
@@ -55,6 +56,23 @@ export class AddUpdateComponent implements OnInit {
     this.api.getDepartment().subscribe((res) => {
       this.departmentArray = res.responseData;
     });
+  }
+
+  openInputFile() {
+    let clickInputFile:any = document.getElementById("img-upload");
+    clickInputFile?.click();
+  }
+
+  fileUpload(event:any) {
+    let selectedFile:any = event.target.files[0];  // Capture the selected file
+        this.api.uploadFile('upload',selectedFile).subscribe(
+          (response) => {
+            this.addUpdateForm.controls['document'].setValue(response.imageUrl);
+          },
+          (error) => {
+            console.error(error);
+          }
+        );
   }
 
   onSubmit() {
@@ -71,6 +89,7 @@ export class AddUpdateComponent implements OnInit {
         "emailId": this.addUpdateForm.value.emailId,
         "contactNo": this.addUpdateForm.value.contactNo,
         "department": +this.addUpdateForm.value.department,
+        "document": this.addUpdateForm.value.document
       }
       if (this.editFlag == false) {
         this.api.postApi('create', JSON.stringify(obj)).subscribe({
@@ -87,12 +106,15 @@ export class AddUpdateComponent implements OnInit {
           error: ((error:any) => { alert(error.error.message); })
         });
       } else {
-        this.api.updateApi('update/' + this.addUpdateForm.value.id, JSON.stringify(obj)).subscribe((res) => {
-          console.log('data response', res);
-          alert("Data Update Successfully");
+        this.api.updateApi('update/' + this.addUpdateForm.value.id, JSON.stringify(obj)).subscribe({
+          next: (res: any) => {
+          if(res.statusCode === 200){
           this.defaultForm();
           this.getUserData();
           this.editFlag = false;
+          } 
+            alert(res.message);
+        }, error: ((error:any) => { alert(error.error.message); })
         });
       }
     }
@@ -118,6 +140,7 @@ export class AddUpdateComponent implements OnInit {
       emailId: obj.emailId,
       contactNo: obj.contactNo,
       department: +obj.department,
+      document: obj.document
     })
   }
 

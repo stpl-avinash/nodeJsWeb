@@ -38,5 +38,13 @@ export class ServiceApiService {
     return this.http.delete(API_URL + url).pipe(map((res) => res));
   }
 
+  uploadFile(url:any,file: File): Observable<any> {
+    const formData = new FormData();  // Use FormData to send the file
+    formData.append('file', file, file.name);  // 'file' is the name of the field in multer
+
+    return this.http.post<any>(API_URL + url, formData, {
+      headers: new HttpHeaders(),
+    });
+  }
 
 }

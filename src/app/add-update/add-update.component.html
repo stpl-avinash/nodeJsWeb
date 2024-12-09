@@ -47,12 +47,30 @@
             <option [value]="dept.id" *ngFor="let dept of departmentArray">{{dept.textEnglish}}</option>
           </select>
       </div>
-      <div class="col-sm-8 text-end mt-4">
+      <div class="col-sm-4 mb-3">
+        <label for="fuPhoto" class="form-label">Document</label>
+        <div class="uploadimg">
+            <input type="file" id="img-upload" class="d-none" (change)="fileUpload($event)"
+                #fileInput>
+            <button type="button" class="btn btn-primary btn-sm btn-add me-2" *ngIf="!addUpdateForm.value?.document"
+                (click)="openInputFile()"> Upload Document
+            </button>
+            <button type="button" class="btn btn-light btn-sm btn-add" *ngIf="addUpdateForm.value?.document" >
+              <a [attr.href]="addUpdateForm.value?.document" target="_blank">
+                <i class="fa-duotone fa-regular fa-file-excel"></i>
+              </a>
+        </button>
+            <button type="button" class="btn btn-light btn-sm btn-remove" *ngIf="addUpdateForm.value?.document"
+                (click)="addUpdateForm.controls['document']?.setValue('')"><i class="fas fa-trash-alt text-danger"></i></button>
+        </div>
+    </div>
+      <div class="col-sm-4 text-end mt-4">
         <button type="button" class="btn btn-danger mb-3 me-2" (click)="clearForm()">Clear</button>
       <button type="submit" class="btn btn-primary mb-3" (click)="onSubmit()">{{editFlag == false ? 'Submit' : 'Update'}}</button>
       </div>
     </div>
 </form>
+
     </div>
     
     <div class="row m-2">
