@@ -52,7 +52,7 @@
           <div class="col-sm-4 mb-3">
             <label for="fuPhoto" class="form-label">Document</label>
             <div class="uploadimg">
-              <input type="file" id="img-upload" class="d-none" (change)="fileUpload($event)" #fileInput>
+              <input type="file" id="img-upload" class="d-none" (change)="fileUpload($event);fileInput.value = ''" #fileInput>
               <button type="button" class="btn btn-primary btn-sm btn-add me-4" *ngIf="!addUpdateForm.value?.document"
                 (click)="openInputFile()"> Upload Doc
               </button>

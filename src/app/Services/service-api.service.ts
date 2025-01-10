@@ -20,7 +20,7 @@ export class ServiceApiService {
     return this.http.get('https://mahamahasul-api.mahamining.com/MahaMahasul/api/Dropdown/GetAllDepartMent').pipe(map((res) => res));
   }
 
-   postApi(url: string, payload: any): Observable<any> {
+   postApi(url: string, payload?: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(API_URL + url, payload, { headers }).pipe(
       map((res) => res)  // This maps the response, you can adjust as needed
